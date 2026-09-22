@@ -1,0 +1,58 @@
+Metadata-Version: 2.4
+Name: prisma-api
+Version: 0.1.0
+Summary: PRISMA Command Center API
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi>=0.115.0
+Requires-Dist: uvicorn[standard]>=0.32.0
+Requires-Dist: sqlalchemy>=2.0.36
+Requires-Dist: alembic>=1.14.0
+Requires-Dist: pydantic>=2.10.0
+Requires-Dist: pydantic-settings>=2.6.0
+Requires-Dist: python-multipart>=0.0.17
+Requires-Dist: httpx>=0.28.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.3.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.24.0; extra == "dev"
+Requires-Dist: ruff>=0.8.0; extra == "dev"
+Requires-Dist: mypy>=1.13.0; extra == "dev"
+
+# PRISMA API
+
+FastAPI backend with feature-based modules under `src/prisma_api/features/`.
+
+Runs **locally** with SQLite. No Docker, Redis, Celery, or PostgreSQL.
+
+## Setup
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+cp ../../.env.example .env
+mkdir -p data
+```
+
+From repository root:
+
+```bash
+npm run install:api
+npm run dev:api
+```
+
+## Layout
+
+- `core/` — configuration, database, scheduler, dependencies
+- `features/` — domain features (auth, world, events, game_session)
+- `models/` — SQLAlchemy models (Phase 1)
+- `alembic/` — database migrations
+- `data/` — SQLite database file (gitignored)
+
+## Tests
+
+```bash
+PYTHONPATH=src .venv/bin/pytest
+# or from repo root:
+npm run test:api
+```

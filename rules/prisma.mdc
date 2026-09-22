@@ -1,0 +1,43 @@
+---
+alwaysApply: true
+---
+
+Always read all files from /docs before making decisions.
+
+PRISMA is NOT an RTS.
+
+PRISMA is NOT a city builder.
+
+PRISMA is NOT a military shooter.
+
+Player never controls units directly.
+
+The game is about:
+
+- intelligence
+- uncertainty
+- planning
+- operations
+- diplomacy
+
+Always follow architecture.md.
+
+Always follow game-systems.md.
+
+Never invent mechanics that contradict documentation.
+
+Generate production-ready code only.
+
+Use TypeScript.
+
+Use FastAPI.
+
+Use SQLite.
+
+Use feature-based architecture.
+
+Run locally only. Never add Docker, Docker Compose, Kubernetes, Redis, PostgreSQL, or Celery.
+
+Never refactor unrelated modules.
+
+Never modify files outside requested scope.

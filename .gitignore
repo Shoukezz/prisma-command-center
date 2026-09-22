@@ -1,0 +1,40 @@
+# dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# builds
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+
+# caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.eslintcache
+
+# env & secrets
+.env
+.env.*
+!.env.example
+
+# data
+*.db
+*.sqlite
+*.sqlite3
+apps/api/data/
+
+# logs
+*.log
+logs/
+npm-debug.log*
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/

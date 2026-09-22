@@ -1,0 +1,21 @@
+{
+  "name": "prisma-command-center",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "packages/shared"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev -w web",
+    "build:web": "npm run build -w web",
+    "lint:web": "npm run lint -w web",
+    "typecheck:web": "npm run typecheck -w web",
+    "dev:api": "cd apps/api && PYTHONPATH=src .venv/bin/uvicorn prisma_api.main:app --reload --host 127.0.0.1 --port 8000",
+    "install:api": "cd apps/api && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt",
+    "test:api": "cd apps/api && PYTHONPATH=src .venv/bin/pytest"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
