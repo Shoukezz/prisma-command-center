@@ -67,3 +67,12 @@ controls are persisted with the active world.
 ```bash
 npm run test:api
 ```
+
+## Roadmap
+
+- **Diplomacy** — the web app has a `/diplomacy` route and a `features/diplomacy`
+  module, but there is no backing API router yet. The page renders an explicit
+  "not implemented" state rather than a silently empty screen.
+- **Auth** and **game sessions** — `features/auth` and `features/game_session`
+  on the API are scaffolded (service/repository/router files exist) but have no
+  endpoints implemented yet; this is currently a single-player, no-login build.
