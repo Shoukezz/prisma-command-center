@@ -4,12 +4,10 @@ from __future__ import annotations
 
 import random
 import uuid
-from typing import Optional
 
 from fastapi import HTTPException, status
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 
-from prisma_api.features.intelligence.engine import IntelligenceEngine
 from prisma_api.models import (
     ACTION_IGNORE,
     ACTION_LAUNCH_RECON,
@@ -18,13 +16,13 @@ from prisma_api.models import (
     ACTION_STATUS_COMPLETED,
     ACTION_TYPES,
     ASSET_AVAILABLE,
+    OP_STATUS_ACTIVE,
+    OPERATION_RECON,
+    OPERATION_STRIKE,
     Asset,
     IntelligenceAction,
     IntelligenceReport,
     Operation,
-    OP_STATUS_ACTIVE,
-    OPERATION_RECON,
-    OPERATION_STRIKE,
 )
 from prisma_api.models.world import World
 
@@ -40,7 +38,7 @@ class IntelligenceActionService:
         world: World,
         intel_report_id: str,
         action_type: str,
-        reason: Optional[str] = None,
+        reason: str | None = None,
     ) -> IntelligenceAction:
         """Player takes action on an intelligence report.
 
@@ -172,7 +170,7 @@ class IntelligenceActionService:
         intel: IntelligenceReport,
         action: IntelligenceAction,
         operation_type: str,
-    ) -> Optional[Operation]:
+    ) -> Operation | None:
         """Automatically plan a recon or strike operation on the intelligence target.
 
         Returns None if no suitable asset is available.
@@ -184,9 +182,9 @@ class IntelligenceActionService:
         )
 
         if operation_type == OPERATION_RECON:
-            query = query.filter(Asset.supports_recon == True)
+            query = query.filter(Asset.supports_recon.is_(True))
         elif operation_type == OPERATION_STRIKE:
-            query = query.filter(Asset.supports_strike == True)
+            query = query.filter(Asset.supports_strike.is_(True))
 
         asset = query.first()
         if not asset:

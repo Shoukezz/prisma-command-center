@@ -85,7 +85,10 @@ def _bias_narrative(bias: str, report: IntelligenceReport) -> str:
             f"Артефакти збору даних поблизу {region} можуть відображати рутинну активність. "
             "Технічний шум часто помилково сприймають як ворожі наміри."
         )
-    return f"До даних щодо {region} застосовано стандартну перевірку; виняткових чинників не виявлено."
+    return (
+        f"До даних щодо {region} застосовано стандартну перевірку; "
+        "виняткових чинників не виявлено."
+    )
 
 
 def interpret_report(report: IntelligenceReport, analyst: Analyst) -> InterpretationResult:

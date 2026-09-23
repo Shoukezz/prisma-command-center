@@ -1,3 +1,5 @@
+import asyncio
+import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -5,10 +7,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from prisma_api.api.router import api_router
-import asyncio
-import logging
-
-from prisma_api.api.websocket import broadcast_world_update, router as websocket_router
+from prisma_api.api.websocket import broadcast_world_update
+from prisma_api.api.websocket import router as websocket_router
 from prisma_api.core.config import get_settings
 from prisma_api.core.database import SessionLocal, init_db
 from prisma_api.core.scheduler import BackgroundScheduler

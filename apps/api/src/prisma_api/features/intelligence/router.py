@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, Query
 
 from prisma_api.api.websocket import broadcast_world_update
 from prisma_api.core.deps import DbSession

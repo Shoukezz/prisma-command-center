@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from prisma_api.features.events.presentation import event_to_player_schema
 from prisma_api.features.intelligence.schemas import IntelReportSchema
 from prisma_api.features.operations.mappers import asset_to_schema, operation_to_schema
@@ -28,8 +26,8 @@ def world_state_to_schema(
     world: World,
     events: list[Event],
     intel_reports: list[IntelReportSchema],
-    assets: Optional[list] = None,
-    operations: Optional[list] = None,
+    assets: list | None = None,
+    operations: list | None = None,
 ) -> WorldStateSchema:
     return WorldStateSchema(
         clock=clock_to_schema(world),

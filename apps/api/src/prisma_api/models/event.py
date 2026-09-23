@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from prisma_api.core.database import Base
+
+if TYPE_CHECKING:
+    from prisma_api.models.intelligence_action import IntelligenceAction
+    from prisma_api.models.world import World
 
 
 class WorldTick(Base):
@@ -33,7 +37,7 @@ class Event(Base):
     severity: Mapped[str] = mapped_column(String(16))
     title: Mapped[str] = mapped_column(String(256))
     summary: Mapped[str] = mapped_column(Text)
-    region_id: Mapped[Optional[int]] = mapped_column(ForeignKey("regions.id"), nullable=True)
+    region_id: Mapped[int | None] = mapped_column(ForeignKey("regions.id"), nullable=True)
     region_name: Mapped[str] = mapped_column(String(128))
     country_name: Mapped[str] = mapped_column(String(128), default="")
     latitude: Mapped[float] = mapped_column(Float)
@@ -56,8 +60,8 @@ class IntelligenceReport(Base):
     region_name: Mapped[str] = mapped_column(String(128))
     latitude: Mapped[float] = mapped_column(Float)
     longitude: Mapped[float] = mapped_column(Float)
-    related_event_id: Mapped[Optional[str]] = mapped_column(String(36), nullable=True)
-    requested_by_action_id: Mapped[Optional[str]] = mapped_column(
+    related_event_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    requested_by_action_id: Mapped[str | None] = mapped_column(
         String(36),
         ForeignKey(
             "intelligence_actions.id",
@@ -71,11 +75,11 @@ class IntelligenceReport(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
 
     world: Mapped[World] = relationship(back_populates="intel_reports")
-    actions: Mapped[list["IntelligenceAction"]] = relationship(
+    actions: Mapped[list[IntelligenceAction]] = relationship(
         back_populates="intel_report",
         foreign_keys="IntelligenceAction.intel_report_id",
     )
-    requested_by_action: Mapped[Optional["IntelligenceAction"]] = relationship(
+    requested_by_action: Mapped[IntelligenceAction | None] = relationship(
         back_populates="follow_up_intel",
         foreign_keys=[requested_by_action_id]
     )

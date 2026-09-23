@@ -1,4 +1,3 @@
-import os
 from functools import lru_cache
 from pathlib import Path
 
@@ -16,7 +15,8 @@ class Settings(BaseSettings):
     app_name: str = "PRISMA API"
     environment: str = "development"
     api_prefix: str = "/api/v1"
-    database_url: str = f"sqlite:///{Path(__file__).parent.parent.parent.parent / 'data' / 'prisma.db'}"
+    _default_db_path = Path(__file__).parent.parent.parent.parent / "data" / "prisma.db"
+    database_url: str = f"sqlite:///{_default_db_path}"
     secret_key: str = Field(default="dev-secret-change-in-production")
     cors_origins: list[str] = Field(
         default_factory=lambda: ["http://localhost:3000", "http://127.0.0.1:3000"]

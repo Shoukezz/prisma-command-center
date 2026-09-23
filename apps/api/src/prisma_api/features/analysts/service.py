@@ -3,7 +3,6 @@ from __future__ import annotations
 import random
 import uuid
 from collections import defaultdict
-from typing import Optional
 
 from sqlalchemy.orm import Session, joinedload
 
@@ -49,9 +48,9 @@ class AnalystService:
         return ordered[: min(count, len(ordered))]
 
     def create_assessments_for_report(
-        self, report: IntelligenceReport, roster: Optional[list[Analyst]] = None
+        self, report: IntelligenceReport, roster: list[Analyst] | None = None
     ) -> list[AnalystAssessment]:
-        world = self._world()
+        self._world()
         roster = roster or self.list_analysts()
         if not roster:
             return []

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import random
 import uuid
-from typing import Optional
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session, joinedload
@@ -73,7 +72,7 @@ class IntelligenceEngine:
 
         return reports
 
-    def generate_phantom(self, world: World) -> Optional[IntelligenceReport]:
+    def generate_phantom(self, world: World) -> IntelligenceReport | None:
         """Occasional false-positive report with no underlying event."""
         if random.random() > PHANTOM_REPORT_CHANCE:
             return None

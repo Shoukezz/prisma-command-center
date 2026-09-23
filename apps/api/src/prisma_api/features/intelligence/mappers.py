@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from prisma_api.features.analysts.schemas import AnalystAssessmentSchema
 from prisma_api.features.intelligence.schemas import IntelReportSchema
 from prisma_api.models import IntelligenceReport
@@ -10,8 +8,8 @@ from prisma_api.schemas.common import CoordinatesSchema
 
 def intel_to_schema(
     report: IntelligenceReport,
-    analyst_assessments: Optional[list[AnalystAssessmentSchema]] = None,
-    player_action: Optional[str] = None,
+    analyst_assessments: list[AnalystAssessmentSchema] | None = None,
+    player_action: str | None = None,
 ) -> IntelReportSchema:
     return IntelReportSchema(
         id=report.id,

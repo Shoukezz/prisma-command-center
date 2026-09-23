@@ -48,7 +48,10 @@ WORLD_GEOGRAPHY: dict[str, tuple[str, str, list]] = {
                 "Балтійський коридор",
                 56.9,
                 24.1,
-                [("Ризьке командування", 56.95, 24.11), ("Талліннський ретранслятор", 59.44, 24.75)],
+                [
+                    ("Ризьке командування", 56.95, 24.11),
+                    ("Талліннський ретранслятор", 59.44, 24.75),
+                ],
             ),
         ],
     ),
@@ -90,7 +93,10 @@ WORLD_GEOGRAPHY: dict[str, tuple[str, str, list]] = {
                 "Східне узбережжя",
                 38.9,
                 -77.0,
-                [("Норфолкська ударна група", 36.85, -76.29), ("Галіфакська станція", 44.65, -63.58)],
+                [
+                    ("Норфолкська ударна група", 36.85, -76.29),
+                    ("Галіфакська станція", 44.65, -63.58),
+                ],
             ),
         ],
     ),
@@ -138,7 +144,10 @@ WORLD_GEOGRAPHY: dict[str, tuple[str, str, list]] = {
                 "Виробничий пояс Південного Китаю",
                 12.0,
                 114.0,
-                [("Манільське виробництво", 14.60, 120.98), ("Підприємства Хошиміна", 10.82, 106.63)],
+                [
+                    ("Манільське виробництво", 14.60, 120.98),
+                    ("Підприємства Хошиміна", 10.82, 106.63),
+                ],
             ),
         ],
     ),
@@ -282,7 +291,10 @@ def _ensure_opening_brief(db: Session, world: World) -> None:
 
     has_opening_intel = (
         db.query(IntelligenceReport)
-        .filter(IntelligenceReport.world_id == world.id, IntelligenceReport.related_event_id == opening_event.id)
+        .filter(
+            IntelligenceReport.world_id == world.id,
+            IntelligenceReport.related_event_id == opening_event.id,
+        )
         .first()
     )
     if has_opening_intel is None:

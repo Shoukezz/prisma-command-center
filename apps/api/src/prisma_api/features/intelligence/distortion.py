@@ -153,7 +153,8 @@ def distort_event_for_source(
     elif profile.code == "HUMINT":
         description = (
             f"Джерело повідомляє про {activity}, що впливає на {region_display}. "
-            f"Деталі суперечать іншим даним. {country_display} — вважати інформацією з одного джерела."
+            f"Деталі суперечать іншим даним. {country_display} — "
+            "вважати інформацією з одного джерела."
         )
     else:  # CYBER
         description = (
@@ -186,14 +187,17 @@ def generate_phantom_content(
     """False-positive style report with no underlying ground-truth event."""
     activity = random.choice(WRONG_TYPE_LABELS)
     region_display = _distort_region_name(region.name, 0.3, all_regions)
-    lat, lng = _jitter_coordinates(region.latitude, region.longitude, profile.location_error_deg * 1.5)
+    lat, lng = _jitter_coordinates(
+        region.latitude, region.longitude, profile.location_error_deg * 1.5
+    )
     confidence = compute_display_confidence(profile, 0.2)
 
     return DistortedReportContent(
         title=f"{profile.title_prefix}: Непідтверджена активність: {activity} — {region_display}",
         description=(
             f"Збір даних виявив ознаки: {activity} поблизу {region_display}. "
-            "Наразі підтверджень з інших джерел немає. Це може бути безпечною або оманливою активністю."
+            "Наразі підтверджень з інших джерел немає. "
+            "Це може бути безпечною або оманливою активністю."
         ),
         region_name=region_display,
         latitude=lat,

@@ -5,7 +5,6 @@ from __future__ import annotations
 import random
 import uuid
 from dataclasses import dataclass
-from typing import Optional
 
 from sqlalchemy.orm import Session, joinedload
 
@@ -25,60 +24,70 @@ EVENT_TEMPLATES: dict[str, list[tuple[str, str, str]]] = {
         (
             "medium",
             "Прикордонна сутичка — {region}",
-            "Повідомляється про непідтверджені зіткнення вздовж кордону {region}. Сили {country} приведено у підвищену готовність.",
+            "Повідомляється про непідтверджені зіткнення вздовж кордону {region}. "
+            "Сили {country} приведено у підвищену готовність.",
         ),
         (
             "high",
             "Ескалація на кордоні {region}",
-            "Біля {city} триває інтенсивний бій. Партнери PRISMA запитали гуманітарні коридори для евакуації цивільних.",
+            "Біля {city} триває інтенсивний бій. "
+            "Партнери PRISMA запитали гуманітарні коридори для евакуації цивільних.",
         ),
     ],
     "cyber_attack": [
         (
             "high",
             "Кібервторгнення — інфраструктура {country}",
-            "Аномальний трафік націлено на енергетичні й транспортні вузли в регіоні {region}. Встановити виконавця не вдалося.",
+            "Аномальний трафік націлено на енергетичні й транспортні вузли в регіоні {region}. "
+            "Встановити виконавця не вдалося.",
         ),
         (
             "critical",
             "Масштабні кіберзбої — {region}",
-            "Скоординована активність програм-затирачів спрямована проти командних мереж {country}. Резервні системи активовано.",
+            "Скоординована активність програм-затирачів спрямована проти командних мереж "
+            "{country}. Резервні системи активовано.",
         ),
     ],
     "coup": [
         (
             "critical",
             "Спроба перевороту — {city}",
-            "Військові підрозділи мобілізуються навколо урядового кварталу в {city}. Дипломатичні канали перевантажені.",
+            "Військові підрозділи мобілізуються навколо урядового кварталу в {city}. "
+            "Дипломатичні канали перевантажені.",
         ),
         (
             "high",
             "Політична нестабільність — {country}",
-            "У {country} виникає внутрішній виклик керівництву. Очікуються заяви регіональних блоків.",
+            "У {country} виникає внутрішній виклик керівництву. "
+            "Очікуються заяви регіональних блоків.",
         ),
     ],
     "terrorist_incident": [
         (
             "high",
             "Терористичний інцидент — {city}",
-            "У центрі {city} повідомляють про вибух. Дані про жертви попередні; місце події не убезпечено.",
+            "У центрі {city} повідомляють про вибух. "
+            "Дані про жертви попередні; місце події не убезпечено.",
         ),
         (
             "medium",
             "Підвищення терористичної загрози — {region}",
-            "Перехоплені переговори вказують на можливі негайні дії в {region}. Рівень достовірності середній.",
+            "Перехоплені переговори вказують на можливі негайні дії в {region}. "
+            "Рівень достовірності середній.",
         ),
     ],
     "economic_crisis": [
         (
             "medium",
             "Ринковий шок — {country}",
-            "Товарні ф’ючерси та валютні спреди на біржах {country} демонструють високу волатильність.",
+            "Товарні ф’ючерси та валютні спреди на біржах {country} "
+            "демонструють високу волатильність.",
         ),
         (
             "low",
             "Збій ланцюгів постачання — {region}",
-            "У {region} повідомляють про затримки виробництва. Логістика консорціуму змінює маршрути.",
+            "У {region} повідомляють про затримки виробництва. "
+            "Логістика консорціуму змінює маршрути.",
         ),
     ],
 }
@@ -90,7 +99,7 @@ class TickGenerationResult:
     intel_reports: list[IntelligenceReport]
 
 
-def _pick_location(db: Session, rng: random.Random) -> tuple[Region, Optional[City]]:
+def _pick_location(db: Session, rng: random.Random) -> tuple[Region, City | None]:
     # Use a local RNG and deterministic selection from the seeded sequence so
     # tests can reproduce event generation reliably.
     regions = (
@@ -106,7 +115,7 @@ def _pick_location(db: Session, rng: random.Random) -> tuple[Region, Optional[Ci
 def _format_template(
     template: tuple[str, str, str],
     region: Region,
-    city: Optional[City],
+    city: City | None,
 ) -> tuple[str, str, str]:
     severity, title_t, summary_t = template
     country_name = region.country.name
@@ -123,7 +132,7 @@ def generate_geopolitical_event(
     db: Session,
     world: World,
     tick_number: int,
-) -> Optional[Event]:
+) -> Event | None:
     """Roll and optionally create one ground-truth geopolitical event for this tick.
 
     Deterministic behavior: decisions are made from a local RNG seeded with

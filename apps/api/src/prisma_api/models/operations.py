@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from prisma_api.core.database import Base
+
+if TYPE_CHECKING:
+    from prisma_api.models.intelligence_action import IntelligenceAction
+    from prisma_api.models.world import World
 
 OPERATION_RECON = "recon"
 OPERATION_STRIKE = "strike"
@@ -55,16 +59,16 @@ class Operation(Base):
     started_at: Mapped[int] = mapped_column(Integer)
     completes_at: Mapped[int] = mapped_column(Integer, index=True)
     duration_minutes: Mapped[int] = mapped_column(Integer)
-    triggering_action_id: Mapped[Optional[str]] = mapped_column(
+    triggering_action_id: Mapped[str | None] = mapped_column(
         String(36), ForeignKey("intelligence_actions.id"), nullable=True
     )
 
     world: Mapped[World] = relationship(back_populates="operations")
     asset: Mapped[Asset] = relationship(back_populates="operations")
-    result: Mapped[Optional["OperationResult"]] = relationship(
+    result: Mapped[OperationResult | None] = relationship(
         back_populates="operation", uselist=False
     )
-    triggering_action: Mapped[Optional["IntelligenceAction"]] = relationship(
+    triggering_action: Mapped[IntelligenceAction | None] = relationship(
         back_populates="related_operation",
         foreign_keys=[triggering_action_id],
     )

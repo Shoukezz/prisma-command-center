@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, List
-
 from pydantic import BaseModel, Field
 
 from prisma_api.features.analysts.schemas import AnalystAssessmentSchema
@@ -19,8 +17,8 @@ class IntelReportSchema(BaseModel):
     timestamp: int = Field(description="Game time in minutes from crisis start")
     region: str
     coordinates: CoordinatesSchema
-    analyst_assessments: List[AnalystAssessmentSchema] = []
-    player_action: Optional[str] = Field(
+    analyst_assessments: list[AnalystAssessmentSchema] = []
+    player_action: str | None = Field(
         default=None,
         description="Last action player took: ignore|request_more_intel|launch_recon|launch_strike",
     )

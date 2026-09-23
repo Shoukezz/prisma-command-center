@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
 from sqlalchemy.orm import Session, joinedload
 
@@ -48,7 +47,7 @@ class WorldSimulationService:
             world.id, world.game_minutes
         )
 
-    def run_single_tick(self, world: Optional[World] = None) -> AdvanceResult:
+    def run_single_tick(self, world: World | None = None) -> AdvanceResult:
         world = world or self.get_active_world()
         world.game_minutes += TICK_GAME_MINUTES
         world.ticks_elapsed += 1
@@ -78,7 +77,7 @@ class WorldSimulationService:
             resolved_operations=resolved,
         )
 
-    def advance_minutes(self, minutes: int, world: Optional[World] = None) -> AdvanceResult:
+    def advance_minutes(self, minutes: int, world: World | None = None) -> AdvanceResult:
         if minutes <= 0:
             world = world or self.get_active_world()
             return AdvanceResult(
@@ -120,9 +119,9 @@ class WorldSimulationService:
     def update_clock(
         self,
         *,
-        is_paused: Optional[bool] = None,
-        speed: Optional[int] = None,
-        world: Optional[World] = None,
+        is_paused: bool | None = None,
+        speed: int | None = None,
+        world: World | None = None,
     ) -> World:
         world = world or self.get_active_world()
         if is_paused is not None:

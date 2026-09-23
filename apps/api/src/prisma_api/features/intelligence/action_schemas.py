@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -23,7 +21,7 @@ class TakeIntelligenceActionSchema(BaseModel):
     action_type: str = Field(
         description="ignore | request_more_intel | launch_recon | launch_strike"
     )
-    reason: Optional[str] = Field(default=None, description="Optional player reason")
+    reason: str | None = Field(default=None, description="Optional player reason")
 
 
 class IntelligenceActionSchema(BaseModel):
@@ -34,8 +32,8 @@ class IntelligenceActionSchema(BaseModel):
     action_type: str
     status: str
     taken_at: int = Field(description="Game minutes when action taken")
-    reason: Optional[str] = None
-    related_operation: Optional[OperationRefSchema] = Field(
+    reason: str | None = None
+    related_operation: OperationRefSchema | None = Field(
         default=None,
         description="If action launched an operation, reference to it",
     )

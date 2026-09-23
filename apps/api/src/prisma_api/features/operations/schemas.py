@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -33,7 +31,7 @@ class OperationSchema(BaseModel):
     asset_id: str
     asset_name: str
     intel_report_id: str
-    result: Optional[OperationResultSchema] = None
+    result: OperationResultSchema | None = None
 
 
 class PlanOperationSchema(BaseModel):

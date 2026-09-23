@@ -16,12 +16,12 @@ from prisma_api.models import (
     ASSET_AVAILABLE,
     ASSET_DAMAGED,
     ASSET_DESTROYED,
-    Event,
     OP_STATUS_COMPLETED,
     OP_STATUS_FAILED,
     OPERATION_RECON,
     OPERATION_STRIKE,
     Asset,
+    Event,
     IntelligenceReport,
     Operation,
     OperationResult,
@@ -49,8 +49,8 @@ def _outcome_text(operation: Operation, success: bool) -> str:
                 "додаткові звіти очікуються в наступному циклі."
             )
         return (
-            f"Розвідка над {region} не вдалася. Ресурс перервав місію через спірний повітряний простір "
-            "або неточні координати — достовірність цілі невизначена."
+            f"Розвідка над {region} не вдалася. Ресурс перервав місію через спірний "
+            "повітряний простір або неточні координати — достовірність цілі невизначена."
         )
     if success:
         return (
@@ -59,7 +59,8 @@ def _outcome_text(operation: Operation, success: bool) -> str:
         )
     return (
         f"Удар поблизу {region} був невдалим. Ціль слабо відповідала розвідданим "
-        f"(достовірність під час планування — {operation.intel_confidence}%) — рекомендуємо новий збір даних."
+        f"(достовірність під час планування — {operation.intel_confidence}%) — "
+        "рекомендуємо новий збір даних."
     )
 
 
@@ -150,8 +151,8 @@ def _generate_consequences(
                 title=f"Наслідки удару: {intel.region_name}",
                 summary=(
                     f"Військовий удар поблизу {intel.region_name} спричинив каскадні наслідки. "
-                    f"Регіональна напруженість зростає. Відбувається обмін дипломатичними сигналами. "
-                    f"Ризик дій у відповідь підвищено."
+                    "Регіональна напруженість зростає. Відбувається обмін дипломатичними "
+                    "сигналами. Ризик дій у відповідь підвищено."
                 ),
                 region_name=intel.region_name,
                 country_name=intel.region_name,
@@ -169,9 +170,9 @@ def _generate_consequences(
                 confidence=random.randint(65, 85),
                 title=f"Оцінка бойових пошкоджень: {intel.region_name}",
                 summary=(
-                    f"Післяударний збір даних вказує на значний вплив у цільовій зоні. "
-                    f"Попередня оцінка свідчить про виконання цілей місії. "
-                    f"Повний аналіз пошкоджень триває."
+                    "Післяударний збір даних вказує на значний вплив у цільовій зоні. "
+                    "Попередня оцінка свідчить про виконання цілей місії. "
+                    "Повний аналіз пошкоджень триває."
                 ),
                 region_name=intel.region_name,
                 latitude=intel.latitude + random.uniform(-0.1, 0.1),
@@ -212,9 +213,9 @@ def _generate_consequences(
                 confidence=random.randint(50, 70),
                 title=f"Уточнення розвідданих: {intel.title}",
                 summary=(
-                    f"Додатковий збір даних вказує, що початкова оцінка цілі була "
-                    f"суттєво неточною. Фактична активність відрізняється від прогнозу. "
-                    f"Рекомендуємо повністю переглянути методику збору даних."
+                    "Додатковий збір даних вказує, що початкова оцінка цілі була "
+                    "суттєво неточною. Фактична активність відрізняється від прогнозу. "
+                    "Рекомендуємо повністю переглянути методику збору даних."
                 ),
                 region_name=intel.region_name,
                 latitude=intel.latitude + random.uniform(-0.2, 0.2),

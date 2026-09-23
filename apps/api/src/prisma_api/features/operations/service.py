@@ -91,7 +91,9 @@ class OperationsService:
             raise HTTPException(status_code=409, detail="Ресурс недоступний")
 
         if operation_type == OPERATION_RECON and not asset.supports_recon:
-            raise HTTPException(status_code=400, detail="Ресурс не може виконувати розвідувальні операції")
+            raise HTTPException(
+                status_code=400, detail="Ресурс не може виконувати розвідувальні операції"
+            )
         if operation_type == OPERATION_STRIKE and not asset.supports_strike:
             raise HTTPException(status_code=400, detail="Ресурс не може виконувати ударні операції")
 

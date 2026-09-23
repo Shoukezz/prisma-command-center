@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "prisma-onboarding-complete";
 
@@ -112,24 +112,23 @@ export function OnboardingGuide({
 }: OnboardingGuideProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  const missionStart = useRef({ operationsCount: 0, gameMinutes: 0 });
-  const hasCheckedStorage = useRef(false);
+  const [missionStart, setMissionStart] = useState({ operationsCount: 0, gameMinutes: 0 });
+  const [hasCheckedStorage, setHasCheckedStorage] = useState(false);
 
-  useEffect(() => {
-    if (!isHydrated || hasCheckedStorage.current) return;
-    hasCheckedStorage.current = true;
+  if (isHydrated && !hasCheckedStorage) {
+    setHasCheckedStorage(true);
     if (window.localStorage.getItem(STORAGE_KEY) !== "true") {
-      missionStart.current = { operationsCount, gameMinutes };
+      setMissionStart({ operationsCount, gameMinutes });
       setIsOpen(true);
     }
-  }, [gameMinutes, isHydrated, operationsCount]);
+  }
 
   useEffect(() => {
     onTargetChange(isOpen ? STEPS[stepIndex].target : null);
   }, [isOpen, onTargetChange, stepIndex]);
 
   const openMission = () => {
-    missionStart.current = { operationsCount, gameMinutes };
+    setMissionStart({ operationsCount, gameMinutes });
     setStepIndex(0);
     setIsOpen(true);
   };
@@ -143,8 +142,8 @@ export function OnboardingGuide({
     if (!requirement) return true;
     if (requirement === "event") return selectedEventId !== null;
     if (requirement === "intel") return selectedIntelId !== null;
-    if (requirement === "operation") return operationsCount > missionStart.current.operationsCount;
-    return gameMinutes >= missionStart.current.gameMinutes + 60;
+    if (requirement === "operation") return operationsCount > missionStart.operationsCount;
+    return gameMinutes >= missionStart.gameMinutes + 60;
   };
 
   const step = STEPS[stepIndex];

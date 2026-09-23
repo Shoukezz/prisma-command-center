@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 from prisma_api.features.intelligence.schemas import IntelReportSchema
@@ -66,8 +64,8 @@ class GeographySchema(BaseModel):
 
 
 class ClockUpdateSchema(BaseModel):
-    is_paused: Optional[bool] = None
-    speed: Optional[int] = Field(default=None, ge=1, le=4)
+    is_paused: bool | None = None
+    speed: int | None = Field(default=None, ge=1, le=4)
 
 
 class AdvanceTimeSchema(BaseModel):
