@@ -16,6 +16,6 @@
     "test:api": "cd apps/api && PYTHONPATH=src .venv/bin/pytest"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   }
 }
