@@ -42,6 +42,7 @@ function makeIntelReportDto(overrides: Partial<IntelReportDto> = {}): IntelRepor
     timestamp: 130,
     region: "Northern Sector",
     coordinates,
+    analyst_assessments: [],
     ...overrides,
   };
 }
@@ -91,31 +92,10 @@ describe("mapEventDto", () => {
 });
 
 describe("mapIntelDto", () => {
-  it("prefers the current description and timestamp fields", () => {
+  it("maps description and timestamp to the view model", () => {
     const mapped = mapIntelDto(makeIntelReportDto());
     expect(mapped.summary).toBe("Thermal imagery shows a column of vehicles.");
     expect(mapped.gameMinutes).toBe(130);
-  });
-
-  it("falls back to the deprecated summary and game_minutes fields when present", () => {
-    const mapped = mapIntelDto(
-      makeIntelReportDto({
-        description: undefined,
-        summary: "Legacy summary text",
-        timestamp: undefined,
-        game_minutes: 45,
-      }),
-    );
-    expect(mapped.summary).toBe("Legacy summary text");
-    expect(mapped.gameMinutes).toBe(45);
-  });
-
-  it("defaults to empty values when neither current nor legacy fields exist", () => {
-    const mapped = mapIntelDto(
-      makeIntelReportDto({ description: undefined, timestamp: undefined }),
-    );
-    expect(mapped.summary).toBe("");
-    expect(mapped.gameMinutes).toBe(0);
   });
 
   it("maps analyst assessments and defaults to an empty array when absent", () => {
@@ -223,13 +203,5 @@ describe("mapWorldState", () => {
     expect(mapped.intelReports).toHaveLength(1);
     expect(mapped.assets).toHaveLength(1);
     expect(mapped.operations).toHaveLength(1);
-  });
-
-  it("defaults assets and operations to an empty array when the API omits them", () => {
-    const mapped = mapWorldState(
-      makeWorldStateDto({ assets: undefined, operations: undefined }),
-    );
-    expect(mapped.assets).toEqual([]);
-    expect(mapped.operations).toEqual([]);
   });
 });

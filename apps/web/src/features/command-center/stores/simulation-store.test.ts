@@ -112,6 +112,7 @@ describe("useSimulationStore", () => {
       ticks_run: 6,
       new_events: [],
       new_intel_reports: [],
+      resolved_operations: [],
     });
 
     await useSimulationStore.getState().advanceTime(60);

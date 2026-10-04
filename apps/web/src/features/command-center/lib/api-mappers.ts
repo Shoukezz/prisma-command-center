@@ -55,18 +55,16 @@ export function mapEventDto(dto: EventDto): WorldEvent {
 }
 
 export function mapIntelDto(dto: IntelReportDto): IntelReport {
-  const timestamp = dto.timestamp ?? dto.game_minutes ?? 0;
-  const description = dto.description ?? dto.summary ?? "";
   return {
     id: dto.id,
-    gameMinutes: timestamp,
+    gameMinutes: dto.timestamp,
     source: dto.source as IntelSource,
     confidence: dto.confidence,
     title: dto.title,
-    summary: description,
+    summary: dto.description,
     region: dto.region,
     coordinates: dto.coordinates,
-    analystAssessments: (dto.analyst_assessments ?? []).map(mapAssessmentDto),
+    analystAssessments: dto.analyst_assessments.map(mapAssessmentDto),
   };
 }
 
@@ -113,7 +111,7 @@ export function mapWorldState(dto: WorldStateDto | AdvanceResultDto) {
     crisisStartLabel: dto.clock.crisis_start_label,
     events: dto.events.map(mapEventDto),
     intelReports: dto.intel_reports.map(mapIntelDto),
-    assets: (dto.assets ?? []).map(mapAssetDto),
-    operations: (dto.operations ?? []).map(mapOperationDto),
+    assets: dto.assets.map(mapAssetDto),
+    operations: dto.operations.map(mapOperationDto),
   };
 }

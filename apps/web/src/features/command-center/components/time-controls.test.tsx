@@ -85,6 +85,7 @@ describe("TimeControls", () => {
       intel_reports: [],
       assets: [],
       operations: [],
+      resolved_operations: [],
     });
 
     const user = userEvent.setup();
