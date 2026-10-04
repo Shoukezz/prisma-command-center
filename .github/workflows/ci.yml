@@ -54,3 +54,31 @@ jobs:
 
       - name: Build
         run: npm run build:web
+
+  contract:
+    name: Shared types match the OpenAPI schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install API dependencies
+        working-directory: apps/api
+        run: python -m venv .venv && .venv/bin/pip install -r requirements.txt
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Regenerate shared types from the live OpenAPI schema
+        run: npm run generate:types
+
+      - name: Fail if the committed types have drifted from the API
+        run: git diff --exit-code -- packages/shared/src/generated

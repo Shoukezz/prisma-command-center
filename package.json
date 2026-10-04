@@ -13,7 +13,9 @@
     "typecheck:web": "npm run typecheck -w web",
     "dev:api": "cd apps/api && PYTHONPATH=src .venv/bin/uvicorn prisma_api.main:app --reload --host 127.0.0.1 --port 8000",
     "install:api": "cd apps/api && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt",
-    "test:api": "cd apps/api && PYTHONPATH=src .venv/bin/pytest"
+    "test:api": "cd apps/api && PYTHONPATH=src .venv/bin/pytest",
+    "generate:openapi": "cd apps/api && PYTHONPATH=src .venv/bin/python scripts/export_openapi.py ../../packages/shared/openapi.json",
+    "generate:types": "npm run generate:openapi && npm run generate -w packages/shared"
   },
   "engines": {
     "node": ">=22"

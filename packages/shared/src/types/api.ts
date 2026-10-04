@@ -1,13 +1,5 @@
-export interface HealthResponse {
-  status: string;
-  environment: string;
-}
+import type { components } from "../generated/openapi";
 
-export interface IntelligenceActionDto {
-  id: string;
-  intel_report_id: string;
-  action_type: string;
-  status: string;
-  taken_at: number;
-  reason: string | null;
-}
+export type HealthResponse = components["schemas"]["HealthResponse"];
+export type IntelligenceActionDto = components["schemas"]["IntelligenceActionSchema"];
+export type OperationRefDto = components["schemas"]["OperationRefSchema"];

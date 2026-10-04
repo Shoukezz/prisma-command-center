@@ -1,5 +1,5 @@
 export { API_PREFIX, API_ROUTES } from "./constants/api";
-export type { HealthResponse, IntelligenceActionDto } from "./types/api";
+export type { HealthResponse, IntelligenceActionDto, OperationRefDto } from "./types/api";
 export type {
   AdvanceResultDto,
   EventDto,
