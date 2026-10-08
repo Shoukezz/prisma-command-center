@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
+
+import { AsyncPanelState } from "@/components/ui/async-panel-state";
 import { Panel } from "@/components/ui/panel";
 import { formatGameTime } from "@/features/command-center/lib/format-time";
 import { useSimulationStore } from "@/features/command-center/stores/simulation-store";
@@ -24,7 +27,18 @@ export function OperationsQueuePanel({ className = "" }: OperationsQueuePanelPro
   const selectedIntelId = useSimulationStore((s) => s.selectedIntelId);
   const planOperation = useSimulationStore((s) => s.planOperation);
   const gameMinutes = useSimulationStore((s) => s.gameMinutes);
+  const isHydrated = useSimulationStore((s) => s.isHydrated);
+  const isSyncing = useSimulationStore((s) => s.isSyncing);
+  const syncError = useSimulationStore((s) => s.syncError);
+  const hydrate = useSimulationStore((s) => s.hydrate);
 
+  // Lets this panel load its own data when mounted directly on the /operations
+  // screen, outside the dashboard where SimulationHydrator already hydrates it.
+  useEffect(() => {
+    if (!isHydrated && !isSyncing) void hydrate();
+  }, [isHydrated, isSyncing, hydrate]);
+
+  const showError = syncError !== null && operations.length === 0;
   const selectedIntel = intelReports.find((r) => r.id === selectedIntelId);
   const availableAssets = assets.filter((a) => a.status === "available");
 
@@ -70,10 +84,16 @@ export function OperationsQueuePanel({ className = "" }: OperationsQueuePanelPro
         </span>
       </div>
 
+      <AsyncPanelState
+        isLoading={!isHydrated}
+        error={showError ? syncError : null}
+        onRetry={() => void hydrate()}
+        isEmpty={operations.length === 0}
+        emptyLabel="У черзі немає операцій."
+        skeletonRows={2}
+      >
       <ul className="max-h-[140px] divide-y divide-panel-border overflow-auto">
-        {operations.length === 0 ? (
-          <li className="py-2 text-xs text-muted">У черзі немає операцій.</li>
-        ) : (
+        {
           operations.map((op) => {
             const active = op.status === "active";
             const done = op.status === "completed" || op.status === "failed";
@@ -116,8 +136,9 @@ export function OperationsQueuePanel({ className = "" }: OperationsQueuePanelPro
               </li>
             );
           })
-        )}
+        }
       </ul>
+      </AsyncPanelState>
     </Panel>
   );
 }

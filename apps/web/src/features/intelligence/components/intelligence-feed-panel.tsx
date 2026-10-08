@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
+
+import { AsyncPanelState } from "@/components/ui/async-panel-state";
 import { Panel } from "@/components/ui/panel";
 import { ConfidenceIndicator } from "@/features/command-center/components/confidence-indicator";
 import { formatGameTime } from "@/features/command-center/lib/format-time";
@@ -12,6 +15,18 @@ export function IntelligenceFeedPanel({ className = "" }: { className?: string }
   const selectedIntelId = useSimulationStore((s) => s.selectedIntelId);
   const selectIntel = useSimulationStore((s) => s.selectIntel);
   const gameMinutes = useSimulationStore((s) => s.gameMinutes);
+  const isHydrated = useSimulationStore((s) => s.isHydrated);
+  const isSyncing = useSimulationStore((s) => s.isSyncing);
+  const syncError = useSimulationStore((s) => s.syncError);
+  const hydrate = useSimulationStore((s) => s.hydrate);
+
+  // Lets this panel load its own data when mounted directly on the /intelligence
+  // screen, outside the dashboard where SimulationHydrator already hydrates it.
+  useEffect(() => {
+    if (!isHydrated && !isSyncing) void hydrate();
+  }, [isHydrated, isSyncing, hydrate]);
+
+  const showError = syncError !== null && intelReports.length === 0;
 
   return (
     <Panel
@@ -22,10 +37,15 @@ export function IntelligenceFeedPanel({ className = "" }: { className?: string }
       }
       bodyClassName="p-0"
     >
+      <AsyncPanelState
+        isLoading={!isHydrated}
+        error={showError ? syncError : null}
+        onRetry={() => void hydrate()}
+        isEmpty={intelReports.length === 0}
+        emptyLabel="Звітів немає."
+      >
       <ul className="divide-y divide-panel-border">
-        {intelReports.length === 0 ? (
-          <li className="p-3 text-muted">Звітів немає.</li>
-        ) : (
+        {
           intelReports.map((report) => {
             const isSelected = report.id === selectedIntelId;
             const isNew = gameMinutes - report.gameMinutes < 60;
@@ -112,8 +132,9 @@ export function IntelligenceFeedPanel({ className = "" }: { className?: string }
               </li>
             );
           })
-        )}
+        }
       </ul>
+      </AsyncPanelState>
     </Panel>
   );
 }

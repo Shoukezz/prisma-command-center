@@ -1,9 +1,5 @@
-import { Panel } from "@/components/ui/panel";
+import { IntelligenceFeedPanel } from "@/features/intelligence/components/intelligence-feed-panel";
 
 export default function IntelligencePage() {
-  return (
-    <Panel title="Розвідувальний центр">
-      <p>Повний робочий простір розвідки — етап 2.1</p>
-    </Panel>
-  );
+  return <IntelligenceFeedPanel className="min-h-[70vh]" />;
 }
