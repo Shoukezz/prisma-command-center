@@ -1,9 +1,10 @@
-import { Panel } from "@/components/ui/panel";
+import { NotImplementedPanel } from "@/components/ui/not-implemented-panel";
 
 export default function AnalystsPage() {
   return (
-    <Panel title="Панель аналітиків">
-      <p>Робочий простір керування аналітиками — етап 2.2</p>
-    </Panel>
+    <NotImplementedPanel
+      title="Панель аналітиків"
+      reason="Аналітики є лише вкладеними оцінками в розвідданих — ще немає окремого API для списку аналітиків чи управління ними. Дивіться розділ «Дорожня карта» в README."
+    />
   );
 }

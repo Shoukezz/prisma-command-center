@@ -73,6 +73,12 @@ npm run test:api
 - **Diplomacy** — the web app has a `/diplomacy` route and a `features/diplomacy`
   module, but there is no backing API router yet. The page renders an explicit
   "not implemented" state rather than a silently empty screen.
+- **Analysts** — analysts currently only exist as nested assessments on an intel
+  report; there is no standalone API or data model for a dedicated analyst list.
+  `/analysts` renders the same honest "not implemented" state as `/diplomacy`.
+- **Assets** — assets are visible today only through the operations queue's
+  asset picker; there is no dedicated endpoint or screen listing every asset
+  and its status. `/assets` renders the same honest "not implemented" state.
 - **Auth** and **game sessions** — `features/auth` and `features/game_session`
   on the API are scaffolded (service/repository/router files exist) but have no
   endpoints implemented yet; this is currently a single-player, no-login build.

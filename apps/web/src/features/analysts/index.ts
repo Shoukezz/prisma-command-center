@@ -1,1 +1,1 @@
-export { AnalystsPanel } from "./components/analysts-panel";
+/** Analysts feature — Phase 2.2 */
