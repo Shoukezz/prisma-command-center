@@ -61,10 +61,12 @@ export function SimulationHydrator() {
         }
       };
       socket.onclose = () => {
+        // The cleanup function below also closes the socket, which fires this handler
+        // after `disposed` is already true — without this guard it would restart a
+        // polling interval that nothing will ever clear again.
+        if (disposed) return;
         startPolling();
-        if (!disposed) {
-          reconnectTimer = window.setTimeout(connect, RECONNECT_DELAY_MS);
-        }
+        reconnectTimer = window.setTimeout(connect, RECONNECT_DELAY_MS);
       };
     };
 
