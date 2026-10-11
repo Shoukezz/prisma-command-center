@@ -1,9 +1,11 @@
 from fastapi.testclient import TestClient
 
 from prisma_api.core.database import SessionLocal
+from prisma_api.features.analysts.seed import DEFAULT_ANALYSTS
+from prisma_api.features.operations.seed_assets import DEFAULT_ASSETS
 from prisma_api.features.world.seed import ensure_world
 from prisma_api.features.world.simulation import WorldSimulationService
-from prisma_api.models import City, Country, Event, Region
+from prisma_api.models import ASSET_AVAILABLE, City, Country, Event, Region
 
 
 def test_world_seeded_with_geography() -> None:
@@ -62,6 +64,35 @@ def test_reset_starts_a_clean_playable_world(client: TestClient) -> None:
     assert data["clock"]["is_paused"] is True
     assert len(data["events"]) == 1
     assert len(data["intel_reports"]) == 1
+
+
+def test_reset_restores_default_roster_and_clears_in_progress_work(client: TestClient) -> None:
+    client.post("/api/v1/world/advance", json={"minutes": 60})
+    intel = client.get("/api/v1/intelligence/reports").json()
+    assets = client.get("/api/v1/operations/assets").json()
+    recon_asset = next(a for a in assets if a["supports_recon"] and a["status"] == ASSET_AVAILABLE)
+    plan_response = client.post(
+        "/api/v1/operations/plan",
+        json={
+            "operation_type": "recon",
+            "intel_report_id": intel[0]["id"],
+            "asset_id": recon_asset["id"],
+        },
+    )
+    assert plan_response.status_code == 200
+
+    response = client.post("/api/v1/world/reset")
+    assert response.status_code == 200
+    data = response.json()
+
+    assert len(data["assets"]) == len(DEFAULT_ASSETS)
+    assert all(a["status"] == ASSET_AVAILABLE for a in data["assets"]), (
+        "the busy asset from the pre-reset operation must come back available"
+    )
+    assert data["operations"] == [], "a fresh world must not carry over the old operation"
+
+    analysts = client.get("/api/v1/analysts").json()
+    assert len(analysts) == len(DEFAULT_ANALYSTS)
 
 
 def test_advance_endpoint(client: TestClient) -> None:
