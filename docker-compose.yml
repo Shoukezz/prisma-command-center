@@ -1,0 +1,28 @@
+services:
+  api:
+    build:
+      context: ./apps/api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: sqlite:///./data/prisma.db
+      API_PREFIX: /api/v1
+      CORS_ORIGINS: '["http://localhost:3000"]'
+      SECRET_KEY: change-me-in-production
+      ENVIRONMENT: development
+      AUTO_TICK: "true"
+      TICK_INTERVAL_SECONDS: "15"
+    volumes:
+      - api-data:/app/data
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  api-data:
